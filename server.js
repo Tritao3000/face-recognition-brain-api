@@ -1,11 +1,11 @@
 const express = require("express");
-const bodyParser = require("body-parser"); // latest version of exressJS now comes with Body-Parser!
+const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
 
 const db = knex({
-  // Enter your own database information here based on what you created
+  // Database Info
   client: "pg",
   connection: {
     host: "127.0.0.1",
@@ -18,7 +18,7 @@ const db = knex({
 const app = express();
 
 app.use(cors());
-app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
+app.use(express.json());
 
 // Test only - when you have a database variable you want to use
 // app.get('/', (req, res)=> {
@@ -62,10 +62,10 @@ app.post("/register", (req, res) => {
         return trx("users")
           .returning("*")
           .insert({
-            // If you are using knex.js version 1.0.0 or higher this now returns an array of objects. Therefore, the code goes from:
-            // loginEmail[0] --> this used to return the email
+            // If knex.js version 1.0.0 or higher
+            // loginEmail[0]
             // TO
-            // loginEmail[0].email --> this now returns the email
+            // loginEmail[0].email
             email: loginEmail[0].email,
             name: name,
             joined: new Date(),
@@ -92,22 +92,6 @@ app.get("/profile/:id", (req, res) => {
       }
     })
     .catch((err) => res.status(400).json("error getting user"));
-});
-
-app.put("/image", (req, res) => {
-  const { id } = req.body;
-  db("users")
-    .where("id", "=", id)
-    .increment("entries", 1)
-    .returning("entries")
-    .then((entries) => {
-      // If you are using knex.js version 1.0.0 or higher this now returns an array of objects. Therefore, the code goes from:
-      // entries[0] --> this used to return the entries
-      // TO
-      // entries[0].entries --> this now returns the entries
-      res.json(entries[0].entries);
-    })
-    .catch((err) => res.status(400).json("unable to get entries"));
 });
 
 app.listen(3000, () => {
