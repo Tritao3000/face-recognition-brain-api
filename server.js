@@ -21,9 +21,6 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/signin", (req, res) => {
-  if (!email || !password) {
-    return res.status(400).json("incorrect form submit");
-  }
   db.select("email", "hash")
     .from("login")
     .where("email", "=", req.body.email)
