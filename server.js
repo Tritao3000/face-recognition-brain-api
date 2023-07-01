@@ -20,11 +20,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Test only - when you have a database variable you want to use
-// app.get('/', (req, res)=> {
-//   res.send(database.users);
-// })
-
 app.post("/signin", (req, res) => {
   db.select("email", "hash")
     .from("login")
@@ -62,10 +57,6 @@ app.post("/register", (req, res) => {
         return trx("users")
           .returning("*")
           .insert({
-            // If knex.js version 1.0.0 or higher
-            // loginEmail[0]
-            // TO
-            // loginEmail[0].email
             email: loginEmail[0].email,
             name: name,
             joined: new Date(),
